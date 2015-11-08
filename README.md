@@ -1,15 +1,15 @@
-# soundcloud-badge [![experimental](http://hughsk.github.io/stability-badges/dist/experimental.svg)](http://github.com/hughsk/stability-badges) #
+# soundcloud-badge-packed [![experimental](http://hughsk.github.io/stability-badges/dist/experimental.svg)](http://github.com/hughsk/stability-badges) #
 
-A [SoundCloud](http://soundcloud.com/) "now playing"-type thing that you can
-drop into [browserify](http://browserify.org/) demos. Makes it easy to stream
-from SoundCloud and ensure you're giving the appropriate credit too.
+A [SoundCloud](http://soundcloud.com/) "now playing"-type thing.
+Makes it easy to stream from SoundCloud and ensure you're giving the appropriate credit too.
+It has no dependency.
 
-[![soundcloud-badge](https://nodei.co/npm/soundcloud-badge.png?mini=true)](https://nodei.co/npm/soundcloud-badge)
+[![soundcloud-badge-packed](https://nodei.co/npm/soundcloud-badge-packed.png?mini=true)](https://nodei.co/npm/soundcloud-badge-packed)
 
 ## Usage ##
 
 ``` javascript
-require('soundcloud-badge')({
+require('soundcloud-badge-packed')({
     client_id: 'your API client ID'
   , song: 'https://soundcloud.com/dylan_king/modern-housing'
   , dark: true
@@ -29,7 +29,7 @@ require('soundcloud-badge')({
 })
 ```
 
-Just call `soundcloud-badge`, these options should do these things:
+Just call `soundcloud-badge-packed`, these options should do these things:
 
 * `client_id`: your SoundCloud API client ID.
 * `song`: the SoundCloud URL for your song: using
