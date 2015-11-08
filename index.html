@@ -5,8 +5,22 @@
     <style type="text/css">
       body { margin:0; padding:0; background-color: #000; }
     </style>
+    <script type="text/javascript" src="./dist/soundcloud-badge.js"></script>
   </head>
   <body>
-    <script type="text/javascript" src="bundle.js"></script>
+    <script type="text/javascript">
+    var div = sclBadge({
+        client_id: 'ded451c6d8f9ff1c62f72523f49dab68'
+      , song: 'https://soundcloud.com/devolverdigital/sun-araw-horse-steppin'
+      , dark: false
+      , getFonts: true
+    }, function(err, src, json) {
+      var audio = new Audio
+      audio.src = src
+      setTimeout(function() {
+        audio.play()
+      }, 500)
+    })
+    </script>
   </body>
 </html>

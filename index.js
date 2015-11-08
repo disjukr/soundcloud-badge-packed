@@ -1,63 +1,50 @@
-var resolve = require('soundcloud-resolve')
-var fonts = require('google-fonts')
-var minstache = require('minstache')
-var insert = require('insert-css')
-var fs = require('fs')
+import fonts from 'google-fonts';
+import minstache from 'minstache';
+import insertCss from 'insert-css';
+import querystring from 'querystring';
 
-var icons = {
-    black: 'https://developers.soundcloud.com/assets/logo_black.png'
-  , white: 'https://developers.soundcloud.com/assets/logo_white.png'
-}
+import styleCss from 'raw!style.css';
+import templateHtml from 'raw!badge.html';
 
-module.exports = badge
-function noop(err){ if (err) throw err }
+const icons = {
+    black: 'https://developers.soundcloud.com/assets/logo_black.png',
+    white: 'https://developers.soundcloud.com/assets/logo_white.png'
+};
 
-var inserted = false
-var gwfadded = false
-var template = null
+let inserted = false;
+let gwfadded = false;
+let template = null;
 
-function badge(options, callback) {
-  if (!inserted) insert(fs.readFileSync(__dirname + '/style.css')), inserted = true
-  if (!template) template = minstache.compile(fs.readFileSync(__dirname + '/badge.html'))
+export default function badge({
+        el=document.createElement('div'),
+        dark=true, client_id='', song='', getFonts=true
+    }, callback=noop) {
+    if (!inserted) insertCss(styleCss), inserted = true;
+    if (!template) template = minstache.compile(templateHtml);
+    if (!gwfadded && getFonts) fonts.add({ 'Open Sans': [300, 600] }), gwfadded = true;
+    let icon = dark ? 'black' : 'white';
+    let fetchUrl = `http://api.soundcloud.com/resolve.json?${
+        querystring.stringify({ client_id, url: song })
+    }`;
+    fetch(fetchUrl).then(response => response.json()).then(json => {
+        if (json.kind !== 'track') throw new Error(
+            'soundcloud-badge only supports individual tracks at the moment'
+        );
+        el.classList[icon === 'black' ? 'remove' : 'add']('npm-scb-white');
+        el.innerHTML = template({
+            artwork: json.artwork_url || json.user.avatar_url,
+            artist: json.user.username,
+            title: json.title,
+            icon: icons[icon],
+            urls: {
+                song: json.permalink_url,
+                artist: json.user.permalink_url
+            }
+        });
+        document.body.appendChild(el);
+        callback(null, json.stream_url + '?client_id=' + client_id, json, el);
+    }).catch(err => callback(err));
+    return el;
+};
 
-  if (!gwfadded && options.getFonts) {
-    fonts.add({ 'Open Sans': [300, 600] })
-    gwfadded = true
-  }
-
-  options = options || {}
-  callback = callback || noop
-
-  var div   = options.el || document.createElement('div')
-  var icon  = !('dark' in options) || options.dark ? 'black' : 'white'
-  var id    = options.client_id
-  var song  = options.song
-
-  resolve(id, song, function(err, json) {
-    if (err) return callback(err)
-    if (json.kind !== 'track') throw new Error(
-      'soundcloud-badge only supports individual tracks at the moment'
-    )
-
-    div.classList[
-      icon === 'black' ? 'remove' : 'add'
-    ]('npm-scb-white')
-
-    div.innerHTML = template({
-        artwork: json.artwork_url || json.user.avatar_url
-      , artist: json.user.username
-      , title: json.title
-      , icon: icons[icon]
-      , urls: {
-          song: json.permalink_url
-        , artist: json.user.permalink_url
-      }
-    })
-
-    document.body.appendChild(div)
-
-    callback(null, json.stream_url + '?client_id=' + id, json, div)
-  })
-
-  return div
-}
+function noop(err) { if (err) throw err; }

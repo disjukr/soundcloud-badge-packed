@@ -1,28 +1,39 @@
 {
-  "name": "soundcloud-badge",
+  "name": "soundcloud-badge-packed",
   "version": "1.0.0",
-  "description": "A SoundCloud 'now-playing' badge that you can just drop into browserify demos",
-  "main": "index.js",
+  "description": "soundcloud-badge webpack version. so you don't need browserify",
+  "main": "dist/soundcloud-badge.js",
   "dependencies": {
-    "brfs": "~0.0.8",
-    "soundcloud-resolve": "~0.0.0",
     "google-fonts": "~0.0.0",
+    "insert-css": "~0.0.0",
     "minstache": "~1.1.0",
-    "insert-css": "~0.0.0"
+    "querystring": "^0.2.0",
+    "whatwg-fetch": "^0.10.1"
   },
-  "browserify": {
-    "transform": "brfs"
+  "devDependencies": {
+    "babel": "^5.8.29",
+    "babel-core": "^5.8.32",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.29",
+    "del": "^2.0.2",
+    "exports-loader": "^0.6.2",
+    "imports-loader": "^0.6.5",
+    "raw-loader": "^0.5.1",
+    "webpack": "^1.12.2",
+    "webpack-notifier": "^1.2.1",
+    "yargs": "^3.26.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "start": "beefy demo.js:bundle.js --live -- -t brfs",
-    "prepublish": "browserify -t brfs demo.js > bundle.js"
+    "build": "babel-node ./build --dev",
+    "clean": "babel-node ./build --clean",
+    "watch": "babel-node ./build --watch --dev",
+    "min": "babel-node ./build --min"
   },
-  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)",
+  "author": "JongChan Choi",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/hughsk/soundcloud-badge.git"
+    "url": "git@github.com:disjukr/soundcloud-badge-packed.git"
   },
   "keywords": [
     "soundcloud",
